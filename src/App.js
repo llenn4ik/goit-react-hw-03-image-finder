@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import axios from "axios";
 import Searchbar from "./Searchbar";
 import ImageGallery from "./ImageGallery";
+import Modal from "./Modal"
 import imagesApi from "./services/imagesApi";
 
 import Loader from "react-loader-spinner";
-// import './App.css';
-// import services from './services';
+
 import s from "./styles.module.css";
 
 export default class App extends Component {
@@ -18,7 +18,7 @@ export default class App extends Component {
     error: null,
     loading: false,
     isOpenModal: false,
-    // BigImage: "",
+    BigImage: "",
   };
 
   // ====
@@ -50,21 +50,36 @@ export default class App extends Component {
     this.setState({ searchQuery: query, page: 1, arrayImages: [] });
   };
 
+  onClickModal = ({ target }) => {
+    this.setState({ isOpenModal: true, BigImage: target.srcset });
+  };
+
+
+  closeModal = () => {
+    this.setState({ BigImage: "" });
+    this.setState({ isOpenModal: false });
+  };
+
   render() {
     const { arrayImages, loading, error, isOpenModal, BigImage } = this.state;
 
     return (
       <div>
-        <p>hello</p>
         <Searchbar onSubmit={this.handleSearchFormSubmit} />
         {error && <p>Whoops, something went wrong: ${error.message}</p>}
        
         {arrayImages.length > 0 && (
           <ImageGallery
             arrayImages={arrayImages}
-            // imageClick={this.onClickModal}
+            onClickModal={this.onClickModal}
           />
         )}
+         {isOpenModal && <Modal  >
+           <img src={BigImage} alt={arrayImages.tags} />
+           <button type="button" className={s.Button_close} onClick={this.closeModal }>
+           close image
+           </button>
+         </Modal> }
          {loading && (
           <Loader
             type="Rings"
@@ -75,7 +90,7 @@ export default class App extends Component {
           />
         )}
           {arrayImages.length > 0 && (
-          <button type="button" onClick={this.fetchImages}>Load more</button>
+          <button type="button" className={s.Button} onClick={this.fetchImages}>Load more</button>
         )}
       </div>
     );

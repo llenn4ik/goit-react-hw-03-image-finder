@@ -1,21 +1,13 @@
 import React from "react";
-// import ImageGalleryItem from "./ImageGalleryItem";
+import ImageGalleryItem from "./ImageGalleryItem";
 import s from './styles.module.css'
 
-export default function ImageGallery({ arrayImages, imageClick }) {
+export default function ImageGallery({ arrayImages, onClickModal }) {
   return (
     <>
        <ul className={s.ImageGallery}>
             {arrayImages.map((arrayImage) => (
-              <li key={arrayImage.id} className={s.ImageGalleryItem}>
-                <img
-                  src={arrayImage.previewURL}
-                  // srcSet={largeImageURL}
-                  alt="foto"
-                  className={s.ImageGalleryItem_image}
-                  // onClick={onClickModal}
-                />
-              </li>
+              <ImageGalleryItem   key={arrayImage.id}  image={arrayImage} onClickModal={onClickModal}/>
             ))}
           </ul>
     </>
